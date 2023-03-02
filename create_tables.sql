@@ -1,44 +1,26 @@
 CREATE TABLE IF NOT EXISTS codes (
-    code  text,
-    price int
+    code  text not null,
+    price int not null
 );
 
 
 CREATE TABLE IF NOT EXISTS issued_codes (
-    unique_code text,
-    code        text,
-    price       int,
-    email       text,
-    pay_date    date,
+    unique_code text not null,
+    code        text not null,
+    price       int  not null,
+    email       text not null,
+    pay_date    text not null,
     ts          timestamp
 );
 
 
 CREATE OR REPLACE FUNCTION issued_codes_ts()
-    RETURNS trigger AS
-$$
+    RETURNS trigger language plpgsql
+AS $function$
 BEGIN
-    INSERT INTO issued_codes(
-         unique_code,
-         code,
-         price,
-         email,
-         pay_date,
-         ts
-    )
-    VALUES(
-         NEW.unique_code,
-         NEW.code,
-         NEW.price,
-         NEW.email,
-         NEW.pay_date,
-         current_date
-   );
-
+    NEW.ts = current_timestamp;
     RETURN NEW;
-END;
-$$
-    LANGUAGE 'plpgsql';
+END; $function$;
 
 
 CREATE TRIGGER issued_codes_ts_trigger
