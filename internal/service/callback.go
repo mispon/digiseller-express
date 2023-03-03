@@ -25,6 +25,20 @@ func (s *Service) Callback(c *gin.Context) {
 		return
 	}
 
+	alreadyUsed, err := s.provider.IsUniqueCodeUsed(uniqueCode)
+	if err != nil {
+		s.logger.Error("failed to check uniquecode", zap.Error(err))
+		c.HTML(502, "error.tmpl", gin.H{
+			"action": "проверить uniquecode",
+		})
+		return
+	}
+
+	if alreadyUsed {
+		c.HTML(400, "error.tmpl", gin.H{"message": "обработать запрос, uniquecode уже был использован"})
+		return
+	}
+
 	payment, err := getPayment(uniqueCode, s.token)
 	if err != nil {
 		s.logger.Error("failed to check payment", zap.Error(err))
