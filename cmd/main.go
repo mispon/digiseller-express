@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
+	"github.com/mispon/digiseller-express/internal/auth"
 	"github.com/mispon/digiseller-express/internal/db"
 	"github.com/mispon/digiseller-express/internal/service"
 	"go.uber.org/zap"
@@ -18,10 +19,15 @@ func main() {
 
 	ctx := context.Background()
 
+	token, err := auth.Token()
+	if err != nil || token == "" {
+		log.Fatal("failed to get token", err)
+	}
+
 	provider := mustProvider(ctx)
 	defer provider.Close()
 
-	svc := service.New(mustLogger(), provider)
+	svc := service.New(token, mustLogger(), provider)
 
 	app.GET("/callback", svc.Callback)
 	app.GET("/ping", svc.Ping)

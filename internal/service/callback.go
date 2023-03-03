@@ -1,20 +1,21 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/cenk/backoff"
 	"github.com/gin-gonic/gin"
+	"github.com/mispon/digiseller-express/internal/http"
 	"go.uber.org/zap"
 )
 
-const checkPaymentURL = "https://api.digiseller.ru/api/purchases/unique-code/"
+const checkPaymentURL = "https://api.digiseller.ru/api/purchases/unique-code"
 
 type Payment struct {
-	Amount int
-	Email  string
-	Status string
+	Amount float64 `json:"amount"`
+	Email  string  `json:"email"`
 }
 
 func (s *Service) Callback(c *gin.Context) {
@@ -24,7 +25,7 @@ func (s *Service) Callback(c *gin.Context) {
 		return
 	}
 
-	payment, err := getPayment(uniqueCode)
+	payment, err := getPayment(uniqueCode, s.token)
 	if err != nil {
 		s.logger.Error("failed to check payment", zap.Error(err))
 		c.HTML(502, "error.tmpl", gin.H{
@@ -32,15 +33,18 @@ func (s *Service) Callback(c *gin.Context) {
 		})
 		return
 	}
+	price := int(payment.Amount)
 
-	code, err := s.provider.PopCode(payment.Amount)
+	code, err := s.provider.PopCode(price)
 	if err != nil {
 		s.logger.Error("failed to get code", zap.Error(err))
 		c.HTML(502, "error.tmpl", gin.H{
-			"action": "получить код оплаты",
+			"action": "найти подходящий код оплаты",
 		})
 		return
 	}
+
+	go s.saveIssuedCode(uniqueCode, code, price, payment.Email)
 
 	c.HTML(200, "index.tmpl", gin.H{
 		"title": "Your order is confirmed!",
@@ -48,17 +52,19 @@ func (s *Service) Callback(c *gin.Context) {
 	})
 }
 
-func getPayment(uniqueCode string) (Payment, error) {
-	url := fmt.Sprintf("%s/%s", checkPaymentURL, uniqueCode)
-	fmt.Println(url)
+func getPayment(uniqueCode, token string) (Payment, error) {
+	url := fmt.Sprintf("%s/%s?token=%s", checkPaymentURL, uniqueCode, token)
 
-	// todo
+	payment, err := http.Do[Payment]("GET", url, nil)
+	if err != nil {
+		return Payment{}, err
+	}
 
-	return Payment{
-		Amount: 20,
-		Email:  "pupa@lupa.com",
-		Status: "ok",
-	}, nil
+	if payment.Amount == 0 && payment.Email == "" {
+		return Payment{}, errors.New("failed to parse response")
+	}
+
+	return payment, nil
 }
 
 func (s *Service) saveIssuedCode(uniqueCode string, code string, price int, email string) {
