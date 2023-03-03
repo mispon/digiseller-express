@@ -1,6 +1,17 @@
 version: '3.1'
 
 services :
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    links:
+      - db:database
+    environment:
+      DATABASE_URL: postgres://admin:admin@database:5432/digi
+
   db:
     image: postgres:15.2-alpine
     ports:
@@ -19,7 +30,7 @@ services :
     depends_on:
       - db
     ports:
-      - "84:8080"
+      - "8084:8080"
 
 volumes:
   dbdata:

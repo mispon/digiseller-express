@@ -1,18 +1,25 @@
 package db
 
 import (
+	"context"
 	"fmt"
+	"github.com/jackc/pgx/v5"
 	"sync"
-	"time"
 )
 
 type Provider struct {
+	ctx context.Context
+
 	guard sync.Mutex
+	conn  *pgx.Conn
 }
 
 // NewProvider creates Provider instance
-func NewProvider() *Provider {
-	return &Provider{}
+func NewProvider(ctx context.Context, conn *pgx.Conn) *Provider {
+	return &Provider{
+		ctx:  ctx,
+		conn: conn,
+	}
 }
 
 // PopCode returns the first matched code and remove it from db
@@ -20,19 +27,45 @@ func (p *Provider) PopCode(price int) (string, error) {
 	p.guard.Lock()
 	defer p.guard.Unlock()
 
-	return fmt.Sprintf("%d:%d", price, time.Now().Unix()), nil
+	var code string
+
+	query := `
+		SELECT code FROM codes
+		WHERE price = $1
+		LIMIT 1
+	`
+	if err := p.conn.QueryRow(p.ctx, query, price).Scan(&code); err != nil || code == "" {
+		return "", fmt.Errorf("failed to select code by price %d, err: %s", price, err.Error())
+	}
+
+	query = `
+		DELETE FROM codes
+		WHERE code = $1
+	`
+	if _, err := p.conn.Exec(p.ctx, query, code); err != nil {
+		return "", fmt.Errorf("failed to delete code %s, err: %s", code, err.Error())
+	}
+
+	return code, nil
 }
 
 // SaveIssued saves issued code to db
-func (p *Provider) SaveIssued(
-	uniqueCode string,
-	code string,
-	price int,
-	email string,
-	datePay string,
-) error {
+func (p *Provider) SaveIssued(uniqueCode string, code string, price int, email string) error {
 	p.guard.Lock()
 	defer p.guard.Unlock()
 
+	query := `
+		INSERT INTO issued_codes(unique_code, code, price, email)
+		VALUES ($1, $2, $3, $4)
+	`
+	if _, err := p.conn.Exec(p.ctx, query, uniqueCode, code, price, email); err != nil {
+		return fmt.Errorf("failed to insert issued code %s, err: %s", code, err.Error())
+	}
+
 	return nil
+}
+
+// Close release db connection
+func (p *Provider) Close() {
+	_ = p.conn.Close(p.ctx)
 }

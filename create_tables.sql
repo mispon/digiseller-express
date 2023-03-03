@@ -1,15 +1,14 @@
 CREATE TABLE IF NOT EXISTS codes (
-    code  text not null,
+    code  text unique not null,
     price int not null
 );
 
 
 CREATE TABLE IF NOT EXISTS issued_codes (
-    unique_code text not null,
-    code        text not null,
+    unique_code text unique not null,
+    code        text unique not null,
     price       int  not null,
     email       text not null,
-    pay_date    text not null,
     ts          timestamp
 );
 

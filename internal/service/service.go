@@ -13,7 +13,7 @@ type Service struct {
 // New returns new Service
 func New(logger *zap.Logger, provider *db.Provider) *Service {
 	return &Service{
-		logger:   logger,
+		logger:   logger.Named("service"),
 		provider: provider,
 	}
 }
