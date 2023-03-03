@@ -21,30 +21,26 @@ type Payment struct {
 func (s *Service) Callback(c *gin.Context) {
 	uniqueCode := c.Query("uniquecode")
 	if uniqueCode == "" {
-		c.HTML(400, "error.tmpl", gin.H{"message": "распознать uniquecode"})
+		c.HTML(400, "error.tmpl", gin.H{"action": "распознать uniquecode"})
 		return
 	}
 
 	alreadyUsed, err := s.provider.IsUniqueCodeUsed(uniqueCode)
 	if err != nil {
 		s.logger.Error("failed to check uniquecode", zap.Error(err))
-		c.HTML(502, "error.tmpl", gin.H{
-			"action": "проверить uniquecode",
-		})
+		c.HTML(502, "error.tmpl", gin.H{"action": "проверить uniquecode"})
 		return
 	}
 
 	if alreadyUsed {
-		c.HTML(400, "error.tmpl", gin.H{"message": "обработать запрос, uniquecode уже был использован"})
+		c.HTML(400, "error.tmpl", gin.H{"action": "обработать запрос, uniquecode уже был использован"})
 		return
 	}
 
 	payment, err := getPayment(uniqueCode, s.token)
 	if err != nil {
 		s.logger.Error("failed to check payment", zap.Error(err))
-		c.HTML(502, "error.tmpl", gin.H{
-			"action": "проверить платеж",
-		})
+		c.HTML(502, "error.tmpl", gin.H{"action": "проверить платеж"})
 		return
 	}
 	price := int(payment.Amount)
@@ -52,18 +48,13 @@ func (s *Service) Callback(c *gin.Context) {
 	code, err := s.provider.PopCode(price)
 	if err != nil {
 		s.logger.Error("failed to get code", zap.Error(err))
-		c.HTML(502, "error.tmpl", gin.H{
-			"action": "найти подходящий код оплаты",
-		})
+		c.HTML(502, "error.tmpl", gin.H{"action": "найти подходящий код оплаты"})
 		return
 	}
 
 	go s.saveIssuedCode(uniqueCode, code, price, payment.Email)
 
-	c.HTML(200, "index.tmpl", gin.H{
-		"title": "Your order is confirmed!",
-		"code":  code,
-	})
+	c.HTML(200, "index.tmpl", gin.H{"code": code})
 }
 
 func getPayment(uniqueCode, token string) (Payment, error) {

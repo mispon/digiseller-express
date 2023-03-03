@@ -10,8 +10,8 @@ services :
     links:
       - db:database
     environment:
-      SELLER_ID: your_seller_id
-      SELLER_API_KEY: your_seller_api_key
+      SELLER_ID: 257605
+      SELLER_API_KEY: 912E623E174D40EFAC3DFE8E34BA3F50
       DATABASE_URL: postgres://admin:admin@database:5432/digi
 
   db:

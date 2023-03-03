@@ -77,13 +77,14 @@ func (p *Provider) IsUniqueCodeUsed(uniqueCode string) (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf("failed to check unique code %s, err: %s", uniqueCode, err.Error())
 	}
+	defer rows.Close()
 
-	vals, err := rows.Values()
-	if err != nil {
-		return false, fmt.Errorf("failed to check unique code %s, err: %s", uniqueCode, err.Error())
+	count := 0
+	for rows.Next() {
+		count++
 	}
 
-	return len(vals) == 0, nil
+	return count > 0, nil
 }
 
 // Close release db connection
