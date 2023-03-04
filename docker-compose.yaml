@@ -2,7 +2,8 @@ version: '3.1'
 
 services :
   app:
-    build: .
+    image: mispon/digi-express:v1.0.0
+    restart: on-failure
     ports:
       - "8080:8080"
     depends_on:
@@ -28,11 +29,11 @@ services :
 
   admin:
     image: adminer
-    restart: always
+    restart: on-failure
     depends_on:
       - db
     ports:
-      - "8084:8080"
+      - "8082:8080"
 
 volumes:
   dbdata:
