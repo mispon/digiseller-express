@@ -9,8 +9,8 @@ Service of automatic issuance of purchased digital codes
       unzip digi-express.zip &&\
       cd digi-express
     ```
-3. Откройте файл `docker-compose.yaml` любым текстовым редактором, например `nano docker-compose.yaml`
-4. Впишите в поля `SELLER_ID` и `SELLER_API_KEY` свои значения и сохраните файл
+3. Откройте файл `.env` любым текстовым редактором, например `nano .env`
+4. Впишите в поля свои значения и сохраните файл
 5. Выполните команду:
     ```shell
     chmod 777 digi-express.sh && sudo ./digi-express.sh
@@ -26,8 +26,8 @@ Service of automatic issuance of purchased digital codes
 Откройте `http://<ip>:8082` в браузере. В окне логина введите следующие значения:
 ```text
 System: PostgreSQL
-Username: admin
-Password: admin
+Username: PG_USER из .env файла
+Password: PG_PASS из .env файла
 Database: digi
 ```
 В схеме `pulic` вы увидете две пустые таблицы: `codes` (активные товары) и `issued_codes` (выданные коды).
