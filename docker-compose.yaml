@@ -11,9 +11,9 @@ services :
     links:
       - db:database
     environment:
-      SELLER_ID: your_seller_id
-      SELLER_API_KEY: your_seller_api_key
-      DATABASE_URL: postgres://admin:admin@database:5432/digi
+      SELLER_ID: ${SELLER_ID}
+      SELLER_API_KEY: ${SELLER_API_KEY}
+      DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database:5432/digi
 
   db:
     image: postgres:15.2-alpine
@@ -23,8 +23,8 @@ services :
       - dbdata:/var/lib/postgresql/data
       - ./create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS}
       POSTGRES_DB: digi
 
   admin:
