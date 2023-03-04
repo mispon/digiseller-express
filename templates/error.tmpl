@@ -1,11 +1,56 @@
 <html>
-	<h1>
-		Что-то пошло не так :(
-	</h1>
-	<h2>
-	    Не удалось {{ .action }}
-	</h2>
-	<h3>
-	    В случае проблемы, напишите продавцу в чат!
-	</h3>
+    <head>
+        <title>Digi Express</title>
+
+        <style>
+            body {
+                background-color: rgb(35, 38, 41);
+            }
+
+            .container {
+                width: 30%;
+                height: 30%;
+                /* Center vertically and horizontally */
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                color: whitesmoke;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+            }
+
+
+            .header {
+                font-weight: bold;
+                font-size: 8vh;
+                color: rgb(150, 55, 48);
+            }
+
+            .action {
+                margin-top: 25px;
+                font-size: 3vh;
+            }
+
+            .hint {
+                margin-top: 40px;
+                font-size: 1.8vh;
+                font-style: italic;
+                color: gainsboro;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                ERROR
+            </div>
+            <div class="action">
+                {{ .message }}
+            </div>
+            <div class="hint">
+                В случае проблемы, напишите продавцу в чат!
+            </div>
+        </div>
+    </body>
 </html>
