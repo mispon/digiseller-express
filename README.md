@@ -13,7 +13,14 @@ Service of automatic issuance of purchased digital codes
       cd digi-express
     ```
 3. Откройте файл `.env` любым текстовым редактором, например `nano .env`
-4. Впишите в поля свои значения и сохраните файл
+4. Впишите в поля свои значения и сохраните файл, например:
+   ```text
+      SELLER_ID=12345
+      SELLER_API_KEY=amsk1hmws9339nandq9iavw5r
+      PG_USER=admin
+      PG_PASS=admin
+      TG_USER=supaseller
+   ```
 5. Выполните команду:
     ```shell
     chmod 777 digi-express.sh && sudo ./digi-express.sh
