@@ -1,7 +1,7 @@
 # digiseller-express
 Service of automatic issuance of purchased digital codes
 
-## Warning
+## Requirement
 Рекомендуемая ОС для сервера - `Ubuntu 18.04|20.04|22.04`
 
 ## Setup
@@ -17,8 +17,8 @@ Service of automatic issuance of purchased digital codes
    ```text
       SELLER_ID=12345
       SELLER_API_KEY=amsk1hmws9339nandq9iavw5r
-      PG_USER=admin
-      PG_PASS=admin
+      PG_USER=pupa (обязательно в lower case)
+      PG_PASS=lupa
       TG_USER=supaseller
    ```
 5. Выполните команду:
