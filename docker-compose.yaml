@@ -2,7 +2,8 @@ version: '3.1'
 
 services :
   app:
-    image: mispon/digi-express:v1.0.1
+    # image: mispon/digi-express:v1.0.1
+    build: .
     restart: on-failure
     ports:
       - "8080:8080"
@@ -14,6 +15,7 @@ services :
       SELLER_ID: ${SELLER_ID}
       SELLER_API_KEY: ${SELLER_API_KEY}
       DATABASE_URL: postgres://${PG_USER}:${PG_PASS}@database:5432/digi
+      TG_USER: ${TG_USER}
 
   db:
     image: postgres:15.2-alpine
