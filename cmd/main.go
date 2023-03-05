@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
+	"log"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 	"github.com/mispon/digiseller-express/internal/auth"
 	"github.com/mispon/digiseller-express/internal/db"
+	"github.com/mispon/digiseller-express/internal/env"
 	"github.com/mispon/digiseller-express/internal/service"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"log"
-	"os"
 )
 
 func main() {
@@ -37,9 +38,9 @@ func main() {
 }
 
 func mustProvider(ctx context.Context) *db.Provider {
-	url, ok := os.LookupEnv("DATABASE_URL")
-	if !ok {
-		log.Fatal("empty DATABASE_URL env")
+	url := env.DatabaseURL()
+	if url == "" {
+		log.Fatal("empty database url")
 	}
 
 	conn, err := pgx.Connect(context.Background(), url)

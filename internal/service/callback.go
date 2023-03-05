@@ -7,6 +7,7 @@ import (
 
 	"github.com/cenk/backoff"
 	"github.com/gin-gonic/gin"
+	"github.com/mispon/digiseller-express/internal/env"
 	"github.com/mispon/digiseller-express/internal/http"
 	"go.uber.org/zap"
 )
@@ -26,20 +27,32 @@ func (s *Service) Callback(c *gin.Context) {
 	}
 
 	if uniqueCode == "" {
-		c.HTML(400, "error.tmpl", gin.H{"message": "400 - пустой uniquecode"})
+		c.HTML(400, "error.tmpl", gin.H{
+			"message":  "400 - пустой uniquecode",
+			"sellerId": env.SellerId(),
+			"tgUser":   env.TelegramUser(),
+		})
 		return
 	}
 
 	payment, err := getPayment(uniqueCode, s.token)
 	if err != nil {
 		s.logger.Error("failed to check payment", zap.Error(err))
-		c.HTML(502, "error.tmpl", gin.H{"message": "502 - ошибка проверки платежа"})
+		c.HTML(502, "error.tmpl", gin.H{
+			"message":  "502 - ошибка проверки платежа",
+			"sellerId": env.SellerId(),
+			"tgUser":   env.TelegramUser(),
+		})
 		return
 	}
 
 	issuedCode, ok := s.provider.GetIssued(uniqueCode)
 	if ok {
-		c.HTML(200, "index.tmpl", gin.H{"code": issuedCode})
+		c.HTML(200, "index.tmpl", gin.H{
+			"code":     issuedCode,
+			"sellerId": env.SellerId(),
+			"tgUser":   env.TelegramUser(),
+		})
 		return
 	}
 
@@ -48,13 +61,21 @@ func (s *Service) Callback(c *gin.Context) {
 	code, err := s.provider.PopCode(price)
 	if err != nil {
 		s.logger.Error("failed to get code", zap.Error(err))
-		c.HTML(502, "error.tmpl", gin.H{"message": "502 - отсутствует подходящий код оплаты"})
+		c.HTML(502, "error.tmpl", gin.H{
+			"message":  "502 - отсутствует подходящий код оплаты",
+			"sellerId": env.SellerId(),
+			"tgUser":   env.TelegramUser(),
+		})
 		return
 	}
 
 	go s.saveIssuedCode(uniqueCode, code, price, payment.Email)
 
-	c.HTML(200, "index.tmpl", gin.H{"code": code})
+	c.HTML(200, "index.tmpl", gin.H{
+		"code":     code,
+		"sellerId": env.SellerId(),
+		"tgUser":   env.TelegramUser(),
+	})
 }
 
 func getPayment(uniqueCode, token string) (Payment, error) {

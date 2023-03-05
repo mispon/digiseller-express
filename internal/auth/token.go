@@ -6,11 +6,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mispon/digiseller-express/internal/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/mispon/digiseller-express/internal/env"
+	"github.com/mispon/digiseller-express/internal/http"
 )
 
 const tokenURL = "https://api.digiseller.ru/api/apilogin"
@@ -21,8 +22,8 @@ type TokenWrap struct {
 
 // Token creates new auth token for digiseller API
 func Token() (string, error) {
-	sellerIdStr, ok := os.LookupEnv("SELLER_ID")
-	if !ok {
+	sellerIdStr := env.SellerId()
+	if sellerIdStr == "" {
 		return "", errors.New("empty SELLER_ID env")
 	}
 
@@ -31,8 +32,8 @@ func Token() (string, error) {
 		return "", err
 	}
 
-	sellerApiKey, ok := os.LookupEnv("SELLER_API_KEY")
-	if !ok {
+	sellerApiKey := env.SellerApiKey()
+	if sellerApiKey == "" {
 		return "", errors.New("empty SELLER_API_KEY env")
 	}
 

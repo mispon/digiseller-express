@@ -1,11 +1,12 @@
 package service
 
 import (
+	"time"
+
 	"github.com/cenk/backoff"
 	"github.com/mispon/digiseller-express/internal/auth"
 	"github.com/mispon/digiseller-express/internal/db"
 	"go.uber.org/zap"
-	"time"
 )
 
 type Service struct {

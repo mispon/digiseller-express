@@ -4,53 +4,119 @@
 
         <style>
             body {
-                background-color: rgb(35, 38, 41);
-            }
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
 
-            .container {
-                width: 30%;
-                height: 30%;
-                /* Center vertically and horizontally */
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-
-                color: whitesmoke;
+                background-color: whitesmoke;
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
             }
 
-
             .header {
+                width: 100%;
+                height: 30%;
+
+                background-color: rgb(35, 38, 41);
+            }
+            .header > p {
+                margin: 0;
+                padding: 0;
+
+                text-align: center;
+                vertical-align: middle;
+                line-height: 25vh;
+
                 font-weight: bold;
-                font-size: 7vh;
+                font-size: 4vw;
                 color: rgb(75,181,67);
             }
 
-            .action {
-                margin-top: 25px;
-                font-size: 3vh;
+            .code {
+                width: 100%;
+                height: 29%;
+                padding-top: 11vh;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+            .code > p {
+                margin: 0;
+                padding: 0;
+
+                text-align: center;
+                font-weight: normal;
+                font-size: 2.5vw;
+                color: rgb(35, 38, 41);
             }
 
-            .hint {
-                margin-top: 40px;
-                font-size: 1.8vh;
-                font-style: italic;
-                color: gainsboro;
+            .footer {
+                width: 100%;
+                height: 30%;
+
+                box-sizing: border-box;
+                margin: auto;
+                padding-top: 13vh;
+
+                background-color: rgb(35, 38, 41);
+                text-align: center;
             }
+
+            .button {
+                display: inline-block;
+                box-sizing: border-box;
+                width: 13vw;
+                margin: .5em;
+                height: 6vh;
+                line-height: 6vh;
+                font-size: 2vh;
+
+                text-align: center;
+                text-decoration: none;
+
+                border-radius: 5px;
+                transition: all .5s;
+            }
+
+            .reviews {
+                background-color: rgb(163, 42, 233);
+                color: whitesmoke;
+            }
+            .reviews:hover {
+                background-color: rgb(145, 25, 237);
+                transition: all .3s;
+            }
+
+            .chat {
+                background-color: rgb(24, 217, 121);
+                color: whitesmoke;
+            }
+            .chat:hover {
+                background-color: rgb(24, 212, 89);
+                transition: all .3s;
+            }
+
+            .tg {
+                background-color: rgb(42, 171, 238);
+                color: whitesmoke;
+            }
+            .tg:hover {
+                background-color: rgb(25, 163, 237);
+                transition: all .3s;
+            }
+
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="header">
-                SUCCESS!
-            </div>
-            <div class="action">
-                Ваш код: {{ .code }}
-            </div>
-            <div class="hint">
-                В случае проблемы, напишите продавцу в чат!
-            </div>
+        <div class="header">
+            <p>🤩 Ваш заказ оформлен! 🎉</p>
+        </div>
+        <div class="code">
+            <p>Код пополнения:</p>
+            <p>{{ .code }}</p>
+        </div>
+        <div class="footer">
+            <a class="button reviews" href="https://oplata.info/info/" target="_blank">ОТЗЫВЫ</a>
+            <a class="button chat" href="https://chat.digiseller.ru/asp/start.asp?fr=g&user={{ .sellerId }}&service=1&shop=1&lang=ru-RU&ownshop=1&id_d=0" target="_blank">ЧАТ</a>
+            <a class="button tg" href="https://t.me/{{ .tgUser }}" target="_blank">ТЕЛЕГРАМ</a>
         </div>
     </body>
 </html>
