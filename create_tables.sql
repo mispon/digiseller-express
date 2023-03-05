@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS codes (
+    id_goods int not null,
     code  text unique not null,
     price int not null
 );

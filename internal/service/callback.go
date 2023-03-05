@@ -15,8 +15,9 @@ import (
 const checkPaymentURL = "https://api.digiseller.ru/api/purchases/unique-code"
 
 type Payment struct {
-	Amount float64 `json:"amount"`
-	Email  string  `json:"email"`
+	ProductID int     `json:"id_goods"`
+	Amount    float64 `json:"amount"`
+	Email     string  `json:"email"`
 }
 
 func (s *Service) Callback(c *gin.Context) {
@@ -35,6 +36,16 @@ func (s *Service) Callback(c *gin.Context) {
 		return
 	}
 
+	issuedCode, ok := s.provider.GetIssued(uniqueCode)
+	if ok {
+		c.HTML(200, "index.tmpl", gin.H{
+			"code":     issuedCode,
+			"sellerId": env.SellerId(),
+			"tgUser":   env.TelegramUser(),
+		})
+		return
+	}
+
 	payment, err := getPayment(uniqueCode, s.token)
 	if err != nil {
 		s.logger.Error("failed to check payment", zap.Error(err))
@@ -46,19 +57,9 @@ func (s *Service) Callback(c *gin.Context) {
 		return
 	}
 
-	issuedCode, ok := s.provider.GetIssued(uniqueCode)
-	if ok {
-		c.HTML(200, "index.tmpl", gin.H{
-			"code":     issuedCode,
-			"sellerId": env.SellerId(),
-			"tgUser":   env.TelegramUser(),
-		})
-		return
-	}
-
 	price := int(payment.Amount)
 
-	code, err := s.provider.PopCode(price)
+	code, err := s.provider.PopCode(payment.ProductID, price)
 	if err != nil {
 		s.logger.Error("failed to get code", zap.Error(err))
 		c.HTML(502, "error.tmpl", gin.H{

@@ -24,7 +24,7 @@ func NewProvider(ctx context.Context, conn *pgx.Conn) *Provider {
 }
 
 // PopCode returns the first matched code and remove it from db
-func (p *Provider) PopCode(price int) (string, error) {
+func (p *Provider) PopCode(productID, price int) (string, error) {
 	p.guard.Lock()
 	defer p.guard.Unlock()
 
@@ -32,10 +32,10 @@ func (p *Provider) PopCode(price int) (string, error) {
 
 	query := `
 		SELECT code FROM codes
-		WHERE price = $1
+		WHERE id_goods = $1 AND price = $2
 		LIMIT 1
 	`
-	if err := p.conn.QueryRow(p.ctx, query, price).Scan(&code); err != nil || code == "" {
+	if err := p.conn.QueryRow(p.ctx, query, productID, price).Scan(&code); err != nil || code == "" {
 		return "", fmt.Errorf("failed to select code by price %d, err: %s", price, err.Error())
 	}
 
