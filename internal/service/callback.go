@@ -19,21 +19,14 @@ type Payment struct {
 }
 
 func (s *Service) Callback(c *gin.Context) {
-	uniqueCode := c.Query("uniquecode")
+	uniqueCode, ok := c.GetQuery("uniquecode")
+	if !ok {
+		c.JSON(200, gin.H{"status": "ok"})
+		return
+	}
+
 	if uniqueCode == "" {
 		c.HTML(400, "error.tmpl", gin.H{"message": "400 - пустой uniquecode"})
-		return
-	}
-
-	alreadyUsed, err := s.provider.IsUniqueCodeUsed(uniqueCode)
-	if err != nil {
-		s.logger.Error("failed to check uniquecode", zap.Error(err))
-		c.HTML(502, "error.tmpl", gin.H{"message": "502 - ошибка проверки uniquecode"})
-		return
-	}
-
-	if alreadyUsed {
-		c.HTML(400, "error.tmpl", gin.H{"message": "400 - uniquecode уже использован"})
 		return
 	}
 
@@ -43,6 +36,13 @@ func (s *Service) Callback(c *gin.Context) {
 		c.HTML(502, "error.tmpl", gin.H{"message": "502 - ошибка проверки платежа"})
 		return
 	}
+
+	issuedCode, ok := s.provider.GetIssued(uniqueCode)
+	if ok {
+		c.HTML(200, "index.tmpl", gin.H{"code": issuedCode})
+		return
+	}
+
 	price := int(payment.Amount)
 
 	code, err := s.provider.PopCode(price)

@@ -30,6 +30,7 @@ func main() {
 	svc := service.New(token, mustLogger(), provider)
 
 	app.GET("/callback", svc.Callback)
+	app.POST("/callback", svc.Callback)
 	app.GET("/ping", svc.Ping)
 
 	log.Fatal(app.Run())

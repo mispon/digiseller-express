@@ -1,6 +1,9 @@
 # digiseller-express
 Service of automatic issuance of purchased digital codes
 
+## Warning
+Рекомендуемая ОС для сервера - `Ubuntu 18.04|20.04|22.04`
+
 ## Setup
 1. Загрузите архив `digi-express.zip` на сервер
 2. Находясь в одном каталоге с архивом, выполните команду:

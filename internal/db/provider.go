@@ -65,26 +65,22 @@ func (p *Provider) SaveIssued(uniqueCode string, code string, price int, email s
 	return nil
 }
 
-func (p *Provider) IsUniqueCodeUsed(uniqueCode string) (bool, error) {
+func (p *Provider) GetIssued(uniqueCode string) (string, bool) {
 	p.guard.Lock()
 	defer p.guard.Unlock()
+
+	var code string
 
 	query := `
 		SELECT code FROM issued_codes
 		WHERE unique_code = $1
+		LIMIT 1
 	`
-	rows, err := p.conn.Query(p.ctx, query, uniqueCode)
-	if err != nil {
-		return false, fmt.Errorf("failed to check unique code %s, err: %s", uniqueCode, err.Error())
-	}
-	defer rows.Close()
-
-	count := 0
-	for rows.Next() {
-		count++
+	if err := p.conn.QueryRow(p.ctx, query, uniqueCode).Scan(&code); err != nil || code == "" {
+		return "", false
 	}
 
-	return count > 0, nil
+	return code, true
 }
 
 // Close release db connection
