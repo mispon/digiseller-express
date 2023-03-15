@@ -44,6 +44,5 @@ sudo ufw allow 8080
 sudo ufw allow 8082
 
 
-# 3. Run app
-
+# 3. Run the app
 docker compose up -d

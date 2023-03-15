@@ -5,10 +5,14 @@ Service of automatic issuance of purchased digital codes
 Рекомендуемая ОС для сервера - `Ubuntu 18.04|20.04|22.04`
 
 ## Setup
-1. Загрузите архив `digi-express.zip` на сервер
+1. Загрузите архив `digi-express.zip` на сервер c помощью команды:
+   ````shell
+   curl ссылка_на_архив -O
+   ````
 2. Находясь в одном каталоге с архивом, выполните команду:
     ```shell
-    sudo apt install unzip &&\
+    sudo apt update -y && apt upgrade -y &&\
+      apt install unzip -y &&\
       unzip digi-express.zip &&\
       cd digi-express
     ```
@@ -23,7 +27,7 @@ Service of automatic issuance of purchased digital codes
    ```
 5. Выполните команду:
     ```shell
-    chmod 777 digi-express.sh && sudo ./digi-express.sh
+    chmod 777 update.sh && chmod 777 run.sh && sudo ./run.sh
     ```
 6. Дождитесь завершения, это может занять какое-то время
 7. Проверьте, что все работает:
