@@ -1,24 +1,13 @@
 package service
 
 import (
-	"errors"
-	"fmt"
 	"time"
 
 	"github.com/cenk/backoff"
 	"github.com/gin-gonic/gin"
 	"github.com/mispon/digiseller-express/internal/env"
-	"github.com/mispon/digiseller-express/internal/http"
 	"go.uber.org/zap"
 )
-
-const checkPaymentURL = "https://api.digiseller.ru/api/purchases/unique-code"
-
-type Payment struct {
-	ProductID int     `json:"id_goods"`
-	Amount    float64 `json:"amount"`
-	Email     string  `json:"email"`
-}
 
 func (s *Service) Callback(c *gin.Context) {
 	uniqueCode, ok := c.GetQuery("uniquecode")
@@ -57,7 +46,16 @@ func (s *Service) Callback(c *gin.Context) {
 		return
 	}
 
-	price := int(payment.Amount)
+	price, err := getRubPrice(payment)
+	if err != nil {
+		s.logger.Error("failed to get rub price", zap.Error(err))
+		c.HTML(502, "error.tmpl", gin.H{
+			"message":  "502 - ошибка получения стоимости в RUB",
+			"sellerId": env.SellerId(),
+			"tgUser":   env.TelegramUser(),
+		})
+		return
+	}
 
 	code, err := s.provider.PopCode(payment.ProductID, price)
 	if err != nil {
@@ -77,21 +75,6 @@ func (s *Service) Callback(c *gin.Context) {
 		"sellerId": env.SellerId(),
 		"tgUser":   env.TelegramUser(),
 	})
-}
-
-func getPayment(uniqueCode, token string) (Payment, error) {
-	url := fmt.Sprintf("%s/%s?token=%s", checkPaymentURL, uniqueCode, token)
-
-	payment, err := http.Do[Payment]("GET", url, nil)
-	if err != nil {
-		return Payment{}, err
-	}
-
-	if payment.Amount == 0 && payment.Email == "" {
-		return Payment{}, errors.New("failed to parse response")
-	}
-
-	return payment, nil
 }
 
 func (s *Service) saveIssuedCode(uniqueCode string, code string, price int, email string) {
