@@ -1,6 +1,9 @@
 package env
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 const (
 	databaseUrl  = "DATABASE_URL"
@@ -22,5 +25,6 @@ func SellerApiKey() string {
 }
 
 func TelegramUser() string {
-	return os.Getenv(tgUser)
+	val := os.Getenv(tgUser)
+	return strings.TrimPrefix(val, "@")
 }
