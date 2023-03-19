@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Download service archive
-curl -O "url"
+curl -O "https://github.com/mispon/digiseller-express/releases/download/v1.0.0/digi-express.zip"
 
 # Update system packages
 sudo apt update -y && apt upgrade -y
