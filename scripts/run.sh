@@ -14,7 +14,7 @@ sudo apt-get remove docker docker-engine docker.io containerd runc
 ### Update the apt package index and install packages to allow apt to use a repository over HTTPS:
 sudo apt-get update
 
- sudo apt-get install \
+sudo apt-get install \
     ca-certificates \
     curl \
     gnupg \
@@ -33,7 +33,17 @@ echo \
 sudo apt-get update -y
 
 ### Install Docker Engine, containerd, and Docker Compose.
+echo ""
+echo "--------------------------------"
+echo "Install docker"
+echo "--------------------------------"
+
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+### Post install
+sudo groupadd docker
+sudo usermod -aG docker "$USER"
+newgrp docker
 
 
 # 2. Open ports
@@ -41,7 +51,6 @@ echo ""
 echo "--------------------------------"
 echo "Open ports for app and db admin"
 echo "--------------------------------"
-
 
 ### Install ufw
 apt install ufw -y
