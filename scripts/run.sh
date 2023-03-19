@@ -89,4 +89,5 @@ echo "--------------------------------"
 echo "Start digi-express app"
 echo "--------------------------------"
 
+mkdir html
 sudo docker compose up -d
