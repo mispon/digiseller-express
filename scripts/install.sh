@@ -4,10 +4,11 @@
 curl -O "https://github.com/mispon/digiseller-express/releases/download/v1.0.0/digi-express.zip"
 
 # Update system packages
-sudo apt update -y && sudo apt upgrade -y
+sudo apt update -y
+sudo apt upgrade -y
 
 # Unzip service archive
-apt install unzip -y
+sudo apt install unzip -y
 unzip digi-express.zip
 cd digi-express || exit
 
