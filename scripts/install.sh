@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Download service archive
-curl -O "https://github.com/mispon/digiseller-express/releases/download/v1.0.0/digi-express.zip"
+# Create service folder
+mkdir digi-express && cd digi-express
 
-# Unzip service archive
-sudo apt install unzip -y
-unzip digi-express.zip && cd digi-express
+# Download service files
+curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/docker-compose.yaml"
+curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/create_tables.sql"
+curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/run.sh"
+curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/update.sh"
 
 # Grant access and run service
 chmod 777 update.sh
