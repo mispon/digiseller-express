@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Update system
+sudo apt update -y && sudo apt upgrade -y
+
 # Create service folder
 mkdir digi-express && cd digi-express
 

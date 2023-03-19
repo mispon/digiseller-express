@@ -37,6 +37,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 
 # 2. Open ports
+echo ""
 echo "--------------------------------"
 echo "Open ports for app and db admin"
 echo "--------------------------------"
@@ -51,6 +52,7 @@ sudo ufw allow 8082
 
 
 # 3. Input envs
+echo ""
 echo "--------------------------------"
 echo "Setup seller's data"
 echo "--------------------------------"
@@ -78,6 +80,7 @@ TG_USER=$tg_username" > .env
 
 
 # 4. Run the app
+echo ""
 echo "--------------------------------"
 echo "Start digi-express app"
 echo "--------------------------------"
