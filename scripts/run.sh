@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # 1. Install docker and compose
 
 ### Docker and docker compose prerequisites
@@ -35,6 +37,10 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 
 # 2. Open ports
+echo "--------------------------------"
+echo "Open ports for app and db admin"
+echo "--------------------------------"
+
 
 ### Install ufw
 apt install ufw -y
@@ -44,5 +50,36 @@ sudo ufw allow 8080
 sudo ufw allow 8082
 
 
-# 3. Run the app
+# 3. Input envs
+echo "--------------------------------"
+echo "Setup seller's data"
+echo "--------------------------------"
+
+echo "Enter SELLER_ID:"
+read -r seller_id
+
+echo "Enter SELLER_API_KEY:"
+read -r seller_api_key
+
+echo "Enter PG_USER:"
+read -r pg_username
+
+echo "Enter PG_PASS:"
+read -r pg_password
+
+echo "Enter TG_USER:"
+read -r tg_username
+
+echo "SELLER_ID=$seller_id
+SELLER_API_KEY=$seller_api_key
+PG_USER=$pg_username
+PG_PASS=$pg_password
+TG_USER=$tg_username" > .env
+
+
+# 4. Run the app
+echo "--------------------------------"
+echo "Start digi-express app"
+echo "--------------------------------"
+
 docker compose up -d

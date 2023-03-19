@@ -67,13 +67,13 @@ func getRubPrice(payment *Payment) (int, error) {
 	}
 
 	for _, method := range resp.Product.PaymentMethods {
-		if !strings.EqualFold(method.Code, payment.Method) {
+		if !strings.EqualFold(method.Code, "digiseller") {
 			// skip other possible methods
 			continue
 		}
 
 		for _, curr := range method.Currencies {
-			if curr.Type == "WMR" || curr.Type == "RUB" {
+			if curr.Type == "WMR" {
 				return int(curr.Price), nil
 			}
 		}
