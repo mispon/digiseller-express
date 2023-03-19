@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Stop the app and remove old containers
-docker compose stop && docker compose rm -f
+sudo  docker compose stop && sudo docker compose rm -f
 
 # Download new app's image
-docker pull mispon/digi-express:latest
+sudo docker pull mispon/digi-express:latest
 
 # And run
-docker compose up -d
+sudo docker compose up -d

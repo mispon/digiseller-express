@@ -89,4 +89,4 @@ echo "--------------------------------"
 echo "Start digi-express app"
 echo "--------------------------------"
 
-docker compose up -d
+sudo docker compose up -d
