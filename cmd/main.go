@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 	"github.com/mispon/digiseller-express/internal/auth"
@@ -12,11 +10,22 @@ import (
 	"github.com/mispon/digiseller-express/internal/service"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"log"
+	"os"
+)
+
+var (
+	templateFolders = []string{"html", "templates"}
 )
 
 func main() {
+	files, err := readHTMLFiles()
+	if err != nil {
+		log.Fatal("failed to read html templates", err)
+	}
+
 	app := gin.Default()
-	app.LoadHTMLGlob("templates/*")
+	app.LoadHTMLFiles(files...)
 
 	ctx := context.Background()
 
@@ -65,4 +74,29 @@ func mustLogger() *zap.Logger {
 	}
 
 	return logger
+}
+
+func readHTMLFiles() ([]string, error) {
+	filesMap := make(map[string]string)
+
+	for _, folder := range templateFolders {
+		entries, err := os.ReadDir(folder)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, entry := range entries {
+			fileName := entry.Name()
+			if _, ok := filesMap[fileName]; !ok {
+				filesMap[fileName] = folder + "/" + fileName
+			}
+		}
+	}
+
+	files := make([]string, 0, len(filesMap))
+	for _, path := range filesMap {
+		files = append(files, path)
+	}
+
+	return files, nil
 }

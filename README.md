@@ -1,8 +1,15 @@
 # digiseller-express
 Service of automatic issuance of purchased digital codes
 
-## Requirement
+## Requirements
 Рекомендуемая ОС для сервера - `Ubuntu 18.04|20.04|22.04`
+
+Перед установкой, подготовьте данные:
+- **SELLER_ID** - ваш уникальный идентификатор продавца в digiseller, можно найти в ЛК
+- **SELLER_API_KEY** - создается [тут](https://my.digiseller.com/inside/api_keys.asp). Сам ключ пришлют в чат в WebMoney
+- **PG_USER** - логин в БД, обязательно буквами в нижнем регистре, например `superseller`
+- **PG_PASS** - пароль в БД, требование как к любому паролю, например `SuPer!_Secret123`
+- **TG_USER** - ваш никнейм в телеграм, без @, просто `pupa` (не `@pupa`!)
 
 ## Setup
 1. Зайдите на сервер и выполните команду:
@@ -10,12 +17,7 @@ Service of automatic issuance of purchased digital codes
    source <(curl -s https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/install.sh)
    ```
 2. Дождитесь установки всех зависимостей, это может занять какое-то время   
-3. Заполните личные данные, необходимые для работы сервиса с digiseller API и БД:
-   - **SELLER_ID** - ваш уникальный идентификатор продавца в digiseller, можно найти в ЛК
-   - **SELLER_API_KEY** - создается [тут](https://my.digiseller.com/inside/api_keys.asp). Сам ключ пришлют в чат в WebMoney
-   - **PG_USER** - логин в БД, обязательно буквами в нижнем регистре, например `superseller`
-   - **PG_PASS** - пароль в БД, требование как к любому паролю, например `SuPer!_Secret123`
-   - **TG_USER** - ваш никнейм в телеграм, без @, просто `pupa` (не `@pupa`!)
+3. Под конец установки, заполните личные данные, необходимые для работы сервиса с digiseller API и БД (см. `Requirements`)
 4. Чтобы проверить, что сервис запустился и работает, откройте в браузере
    ```text
    http://<ip>:8080/ping
@@ -40,6 +42,9 @@ Service of automatic issuance of purchased digital codes
     http://<ip>:8080/ping
     ```
 
+## Update / Restart
+Чтобы обновить или просто перезапустить сервис, выполните команду `bash ./update.sh` в директории сервиса (`./digi-express`)
+
 ## Callback
 URL обработчика покупок `http://<ip>:8080/callback`, его нужно привязать к товару в настройках в digiseller.
 
@@ -60,5 +65,18 @@ Database: digi
    - `code` - цифровой код для автоматической выдачи
    - `price` - цена кода (начальная цена товара + модификатор, RUB)
 
-## Update / Restart
-Чтобы обновить или просто перезапустить сервис, выполните команду `bash ./update.sh` в директории сервиса (`./digi-express`)
+Пример SQL запроса, для массового добавление кодов:
+```sql
+INSERT INTO
+  codes (id_goods, code, price)
+VALUES
+  (1, 'code1', 100),
+  (2, 'code2', 200),
+  (3, 'code3', 300),
+  (4, 'code4', 400),
+  (5, 'code5', 500);
+```
+
+
+## Custom HTML Pages
+// todo

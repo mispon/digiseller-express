@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS codes (
     id_goods int not null,
-    code  text unique not null,
+    code  text not null,
     price int not null
 );
 
 
 CREATE TABLE IF NOT EXISTS issued_codes (
-    unique_code text unique not null,
-    code        text unique not null,
+    unique_code text not null,
+    code        text not null,
     price       int  not null,
     email       text not null,
     ts          timestamp
