@@ -5,8 +5,7 @@ curl -O "https://github.com/mispon/digiseller-express/releases/download/v1.0.0/d
 
 # Unzip service archive
 sudo apt install unzip -y
-unzip digi-express.zip
-cd digi-express ||
+unzip digi-express.zip && cd digi-express
 
 # Grant access and run service
 chmod 777 update.sh
