@@ -13,7 +13,7 @@ Service of automatic issuance of purchased digital codes
 
 ## Setup
 1. Зайдите на сервер и выполните команду:
-   ```
+   ```shell
    source <(curl -s https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/install.sh)
    ```
 2. Дождитесь установки всех зависимостей, это может занять какое-то время   
@@ -35,7 +35,7 @@ Service of automatic issuance of purchased digital codes
    ```
 3. Выполните команду:
     ```shell
-    ./update.sh
+    bash ./update.sh
     ```
 4. Проверьте, что все работает:
     ```text
@@ -76,6 +76,8 @@ VALUES
   (4, 'code4', 400),
   (5, 'code5', 500);
 ```
+Можно добавлять одинаковые `code` для разных платформ (с разными `id_goods`), 
+при покупке на одной из платформ, все записи выданного кода для других платформ удалятся автоматически.
 
 
 ## Custom HTML Pages
