@@ -46,7 +46,7 @@ func (s *Service) Callback(c *gin.Context) {
 		return
 	}
 
-	price, err := getRubPrice(payment)
+	price, err := getCodePrice(payment)
 	if err != nil {
 		s.logger.Error("failed to get rub price", zap.Error(err))
 		c.HTML(502, "error.tmpl", gin.H{

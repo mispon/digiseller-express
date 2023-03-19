@@ -3,8 +3,6 @@ package service
 import (
 	"errors"
 	"fmt"
-	"strings"
-
 	"github.com/mispon/digiseller-express/internal/http"
 )
 
@@ -13,13 +11,22 @@ const (
 	productURL = "https://api.digiseller.ru/api/products/%d/data"
 )
 
-type Payment struct {
-	ProductID int     `json:"id_goods"`
-	Amount    float64 `json:"amount"`
-	Email     string  `json:"email"`
-	Method    string  `json:"method"`
-	Currency  string  `json:"type_curr"`
-}
+type (
+	PaymentOpts struct {
+		Id    int    `json:"id"`
+		Name  string `json:"name"`
+		Value string `json:"value"`
+	}
+
+	Payment struct {
+		ProductID int           `json:"id_goods"`
+		Amount    float64       `json:"amount"`
+		Email     string        `json:"email"`
+		Method    string        `json:"method"`
+		Currency  string        `json:"type_curr"`
+		Options   []PaymentOpts `json:"options"`
+	}
+)
 
 func getPayment(uniqueCode, token string) (*Payment, error) {
 	url := fmt.Sprintf("%s/%s?token=%s", paymentURL, uniqueCode, token)
@@ -42,23 +49,33 @@ type (
 	}
 
 	Product struct {
-		ID             int             `json:"id"`
-		PaymentMethods []PaymentMethod `json:"payment_methods"`
+		ID      int          `json:"id"`
+		Prices  Prices       `json:"prices"`
+		Options []ProductOpt `json:"options"`
 	}
 
-	PaymentMethod struct {
-		Code       string     `json:"code"`
-		Currencies []Currency `json:"currencies"`
+	Prices struct {
+		Initial InitialPrice `json:"initial"`
 	}
 
-	Currency struct {
-		Type  string  `json:"currency"`
-		Code  string  `json:"code"`
-		Price float64 `json:"price"`
+	InitialPrice struct {
+		Rub float64 `json:"RUB"`
+	}
+
+	ProductOpt struct {
+		Id    int             `json:"id"`
+		Label string          `json:"label"`
+		Vars  []ProductOptVar `json:"variants"`
+	}
+
+	ProductOptVar struct {
+		Text        string  `json:"text"`
+		ModifyType  string  `json:"modify_type"`
+		ModifyValue float64 `json:"modify_value"`
 	}
 )
 
-func getRubPrice(payment *Payment) (int, error) {
+func getCodePrice(payment *Payment) (int, error) {
 	url := fmt.Sprintf(productURL, payment.ProductID)
 
 	resp, err := http.Do[ProductResp]("GET", url, nil)
@@ -66,18 +83,25 @@ func getRubPrice(payment *Payment) (int, error) {
 		return 0, err
 	}
 
-	for _, method := range resp.Product.PaymentMethods {
-		if !strings.EqualFold(method.Code, "digiseller") {
-			// skip other possible methods
-			continue
-		}
+	initialPrice := resp.Product.Prices.Initial.Rub
 
-		for _, curr := range method.Currencies {
-			if curr.Type == "WMR" {
-				return int(curr.Price), nil
+PriceLoop:
+	for _, payOpt := range payment.Options {
+		for _, prodOpt := range resp.Product.Options {
+			if payOpt.Id != prodOpt.Id || payOpt.Name != prodOpt.Label {
+				continue
+			}
+
+			for _, pov := range prodOpt.Vars {
+				if pov.Text != payOpt.Value || pov.ModifyType != "RUB" {
+					continue
+				}
+
+				initialPrice += pov.ModifyValue
+				break PriceLoop
 			}
 		}
 	}
 
-	return 0, fmt.Errorf("method %q not found among the possible payment methods", payment.Method)
+	return int(initialPrice), nil
 }
