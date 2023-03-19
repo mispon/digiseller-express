@@ -40,10 +40,6 @@ echo "--------------------------------"
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
-### Post install
-sudo usermod -aG docker "$USER"
-newgrp docker
-
 
 # 2. Open ports
 echo ""
