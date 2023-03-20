@@ -23,3 +23,43 @@ jobs:
           gist_title: docker-compose.yaml
           gist_description: ""
           github_file: docker-compose.yaml
+      - uses: popsiclestick/gist-sync-action@v1.2.0
+        id: sync-sql-script
+        with:
+          auth: ${{ secrets.TOKEN }}
+          gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
+          gist_title: create-tables.sql
+          gist_description: ""
+          github_file: create-tables.sql
+      - uses: popsiclestick/gist-sync-action@v1.2.0
+        id: sync-install-script
+        with:
+          auth: ${{ secrets.TOKEN }}
+          gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
+          gist_title: install.sh
+          gist_description: ""
+          github_file: scripts/install.sh
+      - uses: popsiclestick/gist-sync-action@v1.2.0
+        id: sync-run-script
+        with:
+          auth: ${{ secrets.TOKEN }}
+          gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
+          gist_title: run.sh
+          gist_description: ""
+          github_file: scripts/run.sh
+      - uses: popsiclestick/gist-sync-action@v1.2.0
+        id: sync-update-script
+        with:
+          auth: ${{ secrets.TOKEN }}
+          gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
+          gist_title: run.sh
+          gist_description: ""
+          github_file: scripts/update.sh
+      - uses: popsiclestick/gist-sync-action@v1.2.0
+        id: sync-repair-script
+        with:
+          auth: ${{ secrets.TOKEN }}
+          gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
+          gist_title: repair.sh
+          gist_description: ""
+          github_file: scripts/repair.sh
