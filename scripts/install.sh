@@ -3,9 +3,6 @@
 # Update system
 sudo apt update -y && sudo apt upgrade -y
 
-# Install git if not exist
-sudo apt install git
-
 # Create service folder
 mkdir digi-express && cd digi-express
 

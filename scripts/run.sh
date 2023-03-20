@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 0. Remove tmp folder
+rm -rf ~/digi-tmp
+
 # 1. Install docker and compose
 
 ### Docker and docker compose prerequisites
@@ -32,7 +35,8 @@ echo \
 ### Update the apt package index:
 sudo apt-get update -y
 
-### Install Docker Engine, containerd, and Docker Compose.
+
+# 2. Install Docker Engine, containerd, and Docker Compose.
 echo ""
 echo "--------------------------------"
 echo "Install docker"
@@ -41,7 +45,7 @@ echo "--------------------------------"
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 
-# 2. Open ports
+# 3. Open ports
 echo ""
 echo "--------------------------------"
 echo "Open ports for app and db admin"
@@ -55,7 +59,7 @@ sudo ufw allow 8080
 sudo ufw allow 8082
 
 
-# 3. Input envs
+# 4. Input envs
 echo ""
 echo "--------------------------------"
 echo "Setup seller's data"
@@ -83,7 +87,7 @@ PG_PASS=$pg_password
 TG_USER=$tg_username" > .env
 
 
-# 4. Run the app
+# 5. Run the app
 echo ""
 echo "--------------------------------"
 echo "Start digi-express app"
