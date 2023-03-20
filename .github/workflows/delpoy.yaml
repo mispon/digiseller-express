@@ -8,7 +8,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - uses: popsiclestick/gist-sync-action@v1.2.0
-        id: sync
+        id: sync-readme
         with:
           auth: ${{ secrets.TOKEN }}
           gist_url: https://gist.github.com/mispon/5305767788b6bae4629e8f6aefc5e10a
@@ -16,7 +16,7 @@ jobs:
           gist_description: ""
           github_file: README.md
       - uses: popsiclestick/gist-sync-action@v1.2.0
-        id: sync
+        id: sync-compose
         with:
           auth: ${{ secrets.TOKEN }}
           gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
