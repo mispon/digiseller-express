@@ -30,7 +30,7 @@ jobs:
           gist_url: https://gist.github.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c
           gist_title: create-tables.sql
           gist_description: ""
-          github_file: create-tables.sql
+          github_file: create_tables.sql
       - uses: popsiclestick/gist-sync-action@v1.2.0
         id: sync-install-script
         with:
