@@ -14,7 +14,7 @@ Service of automatic issuance of purchased digital codes
 ## Setup
 1. Зайдите на сервер и выполните команду:
    ```shell
-   sudo apt install git && source <(git clone https://gist.github.com/mispon/0bb9127090d597d1d0c72beb0d45815c digi-tmp && cat ./digi-tmp/install.sh)
+   sudo apt install git && source <(git clone https://gist.github.com/0bb9127090d597d1d0c72beb0d45815c.git digi-tmp && cat ./digi-tmp/install.sh)
    ```
 2. Дождитесь установки всех зависимостей, это может занять какое-то время   
 3. Под конец установки, заполните личные данные, необходимые для работы сервиса с digiseller API и БД (см. `Requirements`)
