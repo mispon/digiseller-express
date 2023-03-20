@@ -14,7 +14,7 @@ Service of automatic issuance of purchased digital codes
 ## Setup
 1. Зайдите на сервер и выполните команду:
    ```shell
-   source <(curl -s https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/install.sh)
+   source <(curl -s https://gist.githubusercontent.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c/raw/4893d4b3dee8f6e668abe56867ddd466a73d5adf/install.sh)
    ```
 2. Дождитесь установки всех зависимостей, это может занять какое-то время   
 3. Под конец установки, заполните личные данные, необходимые для работы сервиса с digiseller API и БД (см. `Requirements`)

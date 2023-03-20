@@ -7,11 +7,11 @@ sudo apt update -y && sudo apt upgrade -y
 mkdir digi-express && cd digi-express
 
 # Download service files
-curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/docker-compose.yaml"
-curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/create_tables.sql"
-curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/run.sh"
-curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/update.sh"
-curl -O "https://raw.githubusercontent.com/mispon/digiseller-express/master/scripts/repair.sh"
+curl -O "https://gist.githubusercontent.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c/raw/4893d4b3dee8f6e668abe56867ddd466a73d5adf/docker-compose.yaml"
+curl -O "https://gist.githubusercontent.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c/raw/4893d4b3dee8f6e668abe56867ddd466a73d5adf/create_tables.sql"
+curl -O "https://gist.githubusercontent.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c/raw/4893d4b3dee8f6e668abe56867ddd466a73d5adf/run.sh"
+curl -O "https://gist.githubusercontent.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c/raw/4893d4b3dee8f6e668abe56867ddd466a73d5adf/update.sh"
+curl -O "https://gist.githubusercontent.com/mispon/8613e6a133d2eab625c60ffcf70c9e9c/raw/4893d4b3dee8f6e668abe56867ddd466a73d5adf/repair.sh"
 
 # Grant access and run service
 chmod 777 repair.sh
