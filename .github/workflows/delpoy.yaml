@@ -12,4 +12,6 @@ jobs:
         with:
           auth: ${{ secrets.TOKEN }}
           gist_url: https://gist.github.com/mispon/5305767788b6bae4629e8f6aefc5e10a
-          github_file: digi-express.md
+          gist_title: digi-express.md
+          gist_description: ""
+          github_file: README.md
